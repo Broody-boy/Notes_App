@@ -11,7 +11,7 @@ import com.example.notesapp.databinding.FragmentHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class CreateNoteFragment : Fragment() {
+class CreateNoteFragment : BaseFragment() {
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +48,30 @@ class CreateNoteFragment : Fragment() {
 
         binding.tvDateTime.text = currentDate
 
+        binding.imgDone.setOnClickListener {
+            //saveNote
+            saveNote()
+        }
+
         binding.imgBack.setOnClickListener {
             replaceFragment(HomeFragment.newInstance(),false)
         }
     }
 
+    private fun saveNote() {
+
+        if(binding.etNoteTitle.text.isNullOrEmpty()){
+            Toast.makeText(context, "Note Title is Required", Toast.LENGTH_SHORT).show()
+        }
+
+        if(binding.etNoteSubTitle.text.isNullOrEmpty()){
+            Toast.makeText(context, "Note Sub Title is Required", Toast.LENGTH_SHORT).show()
+        }
+
+        if(binding.etNoteDesc.text.isNullOrEmpty()){
+            Toast.makeText(context, "Note Description is Required", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     fun replaceFragment(fragment: Fragment, istransition: Boolean) {
         val fragmentTransition = requireActivity().supportFragmentManager.beginTransaction()
