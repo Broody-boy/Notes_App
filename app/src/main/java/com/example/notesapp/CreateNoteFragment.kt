@@ -6,14 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.notesapp.database.NotesDatabase
 import com.example.notesapp.databinding.FragmentCreateNoteBinding
 import com.example.notesapp.databinding.FragmentHomeBinding
+import com.example.notesapp.entities.Notes
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 
 class CreateNoteFragment : BaseFragment() {
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding get() = _binding!!
+
+    var currentDate:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,7 +49,7 @@ class CreateNoteFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sdf = SimpleDateFormat("dd/M/yyyyy hh:mm:ss")
-        val currentDate = sdf.format(Date())
+        currentDate = sdf.format(Date())
 
         binding.tvDateTime.text = currentDate
 
@@ -70,6 +75,21 @@ class CreateNoteFragment : BaseFragment() {
 
         if(binding.etNoteDesc.text.isNullOrEmpty()){
             Toast.makeText(context, "Note Description is Required", Toast.LENGTH_SHORT).show()
+        }
+
+        launch {
+            var notes = Notes()
+            notes.title = binding.etNoteTitle.text.toString()
+            notes.subTitle = binding.etNoteSubTitle.text.toString()
+            notes.noteText = binding.etNoteDesc.text.toString()
+            notes.dateTime = currentDate
+
+            context?.let {
+                NotesDatabase.getDatabase(it).noteDao().insertNotes(notes)
+                binding.etNoteTitle.setText("")
+                binding.etNoteSubTitle.setText("")
+                binding.etNoteDesc.setText("")
+            }
         }
     }
 
