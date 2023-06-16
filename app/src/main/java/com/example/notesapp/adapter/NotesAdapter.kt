@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.R
 import com.example.notesapp.entities.Notes
 
-class NotesAdapter(val arrList : ArrayList<Notes>) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>(){
+class NotesAdapter(val arrList : List<Notes>) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         return NotesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_rv_notes, parent, false))
