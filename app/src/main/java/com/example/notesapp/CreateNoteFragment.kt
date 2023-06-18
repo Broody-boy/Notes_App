@@ -18,6 +18,7 @@ class CreateNoteFragment : BaseFragment() {
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding get() = _binding!!
 
+    var selectedColor = "#171C26"
     var currentDate:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
