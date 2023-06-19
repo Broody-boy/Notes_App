@@ -3,6 +3,7 @@ package com.example.notesapp
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.notesapp.database.NotesDatabase
 import com.example.notesapp.databinding.FragmentCreateNoteBinding
 import com.example.notesapp.databinding.FragmentHomeBinding
@@ -54,6 +56,11 @@ class CreateNoteFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+            BroadCastReceiver, IntentFilter("bottom_sheet_action")
+        )
+
         val sdf = SimpleDateFormat("dd/M/yyyyy hh:mm:ss")
         currentDate = sdf.format(Date())
         binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
@@ -168,5 +175,10 @@ class CreateNoteFragment : BaseFragment() {
             }
         }
 
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(BroadCastReceiver)
+        super.onDestroy()
     }
 }
