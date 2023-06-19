@@ -1,9 +1,12 @@
 package com.example.notesapp.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.R
 import com.example.notesapp.entities.Notes
@@ -22,6 +25,13 @@ class NotesAdapter(val arrList : List<Notes>) : RecyclerView.Adapter<NotesAdapte
         holder.itemView.findViewById<TextView>(R.id.tvTitle).text = arrList[position].title
         holder.itemView.findViewById<TextView>(R.id.tvDesc).text = arrList[position].noteText
         holder.itemView.findViewById<TextView>(R.id.tvDateTime).text = arrList[position].dateTime
+
+        if(arrList[position].color != null) {
+            holder.itemView.findViewById<CardView>(R.id.cardView).setCardBackgroundColor(Color.parseColor(arrList[position].color))
+        }
+        else{
+            holder.itemView.findViewById<CardView>(R.id.cardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.ColorLightBlack))
+        }
     }
 
     class NotesViewHolder(view:View) : RecyclerView.ViewHolder(view) {
