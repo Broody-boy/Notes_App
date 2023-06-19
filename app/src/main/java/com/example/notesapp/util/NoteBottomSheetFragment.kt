@@ -7,10 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.example.notesapp.R
+import com.example.notesapp.databinding.FragmentNotesBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class NoteBottomSheetFragment : BottomSheetDialogFragment() {
+
+    private var _binding: FragmentNotesBottomSheetBinding? = null
+    private val binding get() = _binding!!
 
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
@@ -64,6 +68,10 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        /* Original: return super.onCreateView(inflater, container, savedInstanceState)
+        Change to:*/
+        _binding = FragmentNotesBottomSheetBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
 }
