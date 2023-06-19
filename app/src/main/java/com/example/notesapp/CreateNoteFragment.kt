@@ -10,6 +10,7 @@ import com.example.notesapp.database.NotesDatabase
 import com.example.notesapp.databinding.FragmentCreateNoteBinding
 import com.example.notesapp.databinding.FragmentHomeBinding
 import com.example.notesapp.entities.Notes
+import com.example.notesapp.util.NoteBottomSheetFragment
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -61,6 +62,11 @@ class CreateNoteFragment : BaseFragment() {
 
         binding.imgBack.setOnClickListener {
             replaceFragment(HomeFragment.newInstance(),false)
+        }
+
+        binding.imgMore.setOnClickListener {
+            var noteBottomSheetFragment = NoteBottomSheetFragment.newInstance()
+            noteBottomSheetFragment.show(requireActivity().supportFragmentManager, "Note Bottom Sheet Fragment")
         }
     }
 

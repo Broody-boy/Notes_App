@@ -19,6 +19,15 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     var selectedColor = "#171C26"
+
+    companion object {
+        fun newInstance() : NoteBottomSheetFragment{
+            val args = Bundle()
+            val fragment = NoteBottomSheetFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
 
