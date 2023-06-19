@@ -1,5 +1,9 @@
 package com.example.notesapp
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -52,7 +56,7 @@ class CreateNoteFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val sdf = SimpleDateFormat("dd/M/yyyyy hh:mm:ss")
         currentDate = sdf.format(Date())
-
+        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
         binding.tvDateTime.text = currentDate
 
         binding.imgDone.setOnClickListener {
@@ -107,5 +111,62 @@ class CreateNoteFragment : BaseFragment() {
             fragmentTransition.setCustomAnimations(android.R.anim.slide_out_right, android.R.anim.slide_in_left)
         }
         fragmentTransition.replace(R.id.frame_layout, fragment).addToBackStack(fragment.javaClass.simpleName).commit()
+    }
+
+    private val BroadCastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+
+            var actionColor = intent!!.getStringExtra("action")
+
+            when(actionColor!!){
+
+                "Blue" -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+                "Yellow" -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+
+                "Purple" -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+
+                "Green" -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+
+                "Orange" -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+
+                "Black" -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+                else -> {
+                    selectedColor = intent.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+            }
+        }
+
     }
 }
