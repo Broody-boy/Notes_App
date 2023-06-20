@@ -72,7 +72,7 @@ class CreateNoteFragment : BaseFragment() {
         }
 
         binding.imgBack.setOnClickListener {
-            replaceFragment(HomeFragment.newInstance(),false)
+            requireActivity().supportFragmentManager.popBackStack()
         }
 
         binding.imgMore.setOnClickListener {
@@ -101,6 +101,7 @@ class CreateNoteFragment : BaseFragment() {
             notes.subTitle = binding.etNoteSubTitle.text.toString()
             notes.noteText = binding.etNoteDesc.text.toString()
             notes.dateTime = currentDate
+            notes.color = selectedColor
 
             context?.let {
                 NotesDatabase.getDatabase(it).noteDao().insertNotes(notes)

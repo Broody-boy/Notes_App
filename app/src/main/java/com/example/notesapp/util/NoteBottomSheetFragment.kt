@@ -1,5 +1,6 @@
 package com.example.notesapp.util
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -28,6 +29,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             return fragment
         }
     }
+    @SuppressLint("RestrictedApi")
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
 
@@ -84,6 +86,11 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
         Change to:*/
         _binding = FragmentNotesBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setListener()
     }
 
     private fun setListener(){
