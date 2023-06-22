@@ -187,6 +187,15 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             intent.putExtra("selectedColor",selectedColor)
             LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
         }
+
+
+        binding.layoutImage.setOnClickListener {
+            val intent = Intent("bottom_sheet_action")
+            intent.putExtra("action","Image")
+            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+            dismiss()
+        }
+
     }
 
 }
