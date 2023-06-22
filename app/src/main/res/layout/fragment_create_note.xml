@@ -130,8 +130,7 @@
             android:layout_gravity="center"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
-            app:tint="@color/ColorWhite"
-            android:src="@drawable/ic_more"/>
+            android:src="@drawable/ic_bar"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
