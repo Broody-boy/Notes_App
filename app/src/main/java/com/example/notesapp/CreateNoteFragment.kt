@@ -18,10 +18,11 @@ import com.example.notesapp.databinding.FragmentHomeBinding
 import com.example.notesapp.entities.Notes
 import com.example.notesapp.util.NoteBottomSheetFragment
 import kotlinx.coroutines.launch
+import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class CreateNoteFragment : BaseFragment() {
+class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding get() = _binding!!
 
@@ -165,6 +166,10 @@ class CreateNoteFragment : BaseFragment() {
                 "Black" -> {
                     selectedColor = intent.getStringExtra("selectedColor")!!
                     binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+                "Image" -> {
 
                 }
 
