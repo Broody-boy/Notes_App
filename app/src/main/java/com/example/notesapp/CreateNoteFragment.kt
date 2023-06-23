@@ -28,6 +28,8 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
 
     var selectedColor = "#171C26"
     var currentDate:String? = null
+    private var READ_STORAGE_PERM = 123
+    private var WRITE_STORAGE_PERM = 456
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -170,7 +172,7 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
                 }
 
                 "Image" -> {
-
+                    readStorageTask()
                 }
 
                 else -> {
@@ -183,8 +185,44 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
 
     }
 
+    private fun hasReadStoragePerm(): Boolean {
+        return EasyPermissions.hasPermissions(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private fun hasWriteStoragePerm(): Boolean {
+        return EasyPermissions.hasPermissions(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    }
+
+    private fun readStorageTask() {
+        if(hasReadStoragePerm()){
+            Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            EasyPermissions.requestPermissions(
+                requireActivity(),
+                getString(R.string.storage_permission_text),
+                READ_STORAGE_PERM,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(BroadCastReceiver)
         super.onDestroy()
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRationaleAccepted(requestCode: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRationaleDenied(requestCode: Int) {
+        TODO("Not yet implemented")
     }
 }
