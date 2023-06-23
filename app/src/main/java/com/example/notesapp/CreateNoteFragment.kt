@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -241,6 +242,22 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
         }
     }
 
+    private fun getPathFromUri(contentUri: Uri):String? {
+        var filePath: String? = null
+
+        var cursor = requireActivity().contentResolver.query(contentUri, null,null,null,null)
+
+        if(cursor == null) {
+            filePath = contentUri.path
+        }
+        else {
+            cursor.moveToFirst()
+            var index = cursor.getColumnIndex("_data")
+            filePath = cursor.getString(index)
+            cursor.close()
+        }
+        return filePath
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
