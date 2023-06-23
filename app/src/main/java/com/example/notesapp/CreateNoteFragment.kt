@@ -55,6 +55,7 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
     var currentDate:String? = null
     private var READ_STORAGE_PERM = 123
     private var REQUEST_CODE_IMAGE = 456
+    private var selectedImagePath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,6 +132,7 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
             notes.noteText = binding.etNoteDesc.text.toString()
             notes.dateTime = currentDate
             notes.color = selectedColor
+            notes.imgPath = selectedImagePath
 
             context?.let {
                 NotesDatabase.getDatabase(it).noteDao().insertNotes(notes)
@@ -273,6 +275,8 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
                         var bitmap = BitmapFactory.decodeStream(inputStream)
                         binding.imgNote.setImageBitmap(bitmap)
                         binding.imgNote.visibility = View.VISIBLE
+
+                        selectedImagePath = getPathFromUri(selectedImageUrl)!!
                     }catch(e: Exception) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                     }
