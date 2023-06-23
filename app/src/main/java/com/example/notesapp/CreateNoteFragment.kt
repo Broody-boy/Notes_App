@@ -18,9 +18,29 @@ import com.example.notesapp.databinding.FragmentHomeBinding
 import com.example.notesapp.entities.Notes
 import com.example.notesapp.util.NoteBottomSheetFragment
 import kotlinx.coroutines.launch
+import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.Date
+
+/*
+Here's how EasyPermissions works:
+
+1) Integration: To use EasyPermissions in your Android project, you need to include the library as a dependency in your project's build.gradle file.
+
+2) Permission Request: With EasyPermissions, you can request permissions by calling a single method, EasyPermissions.requestPermissions(). This method takes the necessary parameters, such as the context, permission string array, and a request code. It internally handles the permission request process and shows the necessary system dialogs to the user.
+
+3) Permission Callbacks: EasyPermissions handles the permission request result and automatically invokes the appropriate callback methods in your code. There are three main callback methods you need to implement in your activity or fragment:
+
+a) onPermissionsGranted(int requestCode, List<String> perms): This method is called when all the requested permissions are granted by the user. You can perform your desired actions in this method.
+
+b) onPermissionsDenied(int requestCode, List<String> perms): This method is called when one or more of the requested permissions are denied by the user. You can handle the denial and take appropriate actions, such as showing an explanation dialog or disabling functionality that requires the permission.
+
+c) onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults): This method is called to receive the result of the permission request. EasyPermissions internally handles the result and invokes the appropriate callback methods mentioned above.
+
+4) Permission Rationale: EasyPermissions provides a utility method, EasyPermissions.shouldShowRequestPermissionRationale(), which checks if the rationale should be shown to the user before requesting permissions. This is useful when explaining to the user why the app needs a particular permission.
+ */
+
 
 class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
     private var _binding: FragmentCreateNoteBinding? = null
@@ -29,7 +49,6 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
     var selectedColor = "#171C26"
     var currentDate:String? = null
     private var READ_STORAGE_PERM = 123
-    private var WRITE_STORAGE_PERM = 456
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -185,13 +204,15 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
 
     }
 
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(BroadCastReceiver)
+        super.onDestroy()
+    }
+
     private fun hasReadStoragePerm(): Boolean {
         return EasyPermissions.hasPermissions(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    private fun hasWriteStoragePerm(): Boolean {
-        return EasyPermissions.hasPermissions(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    }
 
     private fun readStorageTask() {
         if(hasReadStoragePerm()){
@@ -205,24 +226,26 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
-    override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(BroadCastReceiver)
-        super.onDestroy()
-    }
 
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        TODO("Not yet implemented")
+    //EasyPermissions functions:
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,requireActivity())
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        TODO("Not yet implemented")
+        if(EasyPermissions.somePermissionPermanentlyDenied(requireActivity(), perms)){
+            AppSettingsDialog.Builder(requireActivity()).build().show()
+        }
     }
 
-    override fun onRationaleAccepted(requestCode: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
+    override fun onRationaleDenied(requestCode: Int) {}
+    override fun onRationaleAccepted(requestCode: Int) {}
 
-    override fun onRationaleDenied(requestCode: Int) {
-        TODO("Not yet implemented")
-    }
+    //The above three were necessary to override because these were abstract.
 }
