@@ -1,11 +1,14 @@
 package com.example.notesapp
 
+import android.app.Activity.RESULT_OK
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +23,7 @@ import com.example.notesapp.util.NoteBottomSheetFragment
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -49,6 +53,8 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
     var selectedColor = "#171C26"
     var currentDate:String? = null
     private var READ_STORAGE_PERM = 123
+    private var REQUEST_CODE_IMAGE = 456
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -216,7 +222,7 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
 
     private fun readStorageTask() {
         if(hasReadStoragePerm()){
-            Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT).show()
+            pickImageFromGallery()
         }
         else {
             EasyPermissions.requestPermissions(
@@ -224,6 +230,37 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
                 getString(R.string.storage_permission_text),
                 READ_STORAGE_PERM,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    private fun pickImageFromGallery() {
+        var intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        if(intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivityForResult(intent, REQUEST_CODE_IMAGE)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK) {
+            if(data != null) {
+                var selectedImageUrl = data.data
+
+                if(selectedImageUrl != null) {
+
+                    try {
+                        var inputStream = requireActivity().contentResolver.openInputStream(selectedImageUrl)
+                        var bitmap = BitmapFactory.decodeStream(inputStream)
+                        binding.imgNote.setImageBitmap(bitmap)
+                        binding.imgNote.visibility = View.VISIBLE
+                    }catch(e: Exception) {
+                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
