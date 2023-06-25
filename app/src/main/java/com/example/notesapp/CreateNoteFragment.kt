@@ -139,6 +139,8 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
                 binding.etNoteTitle.setText("")
                 binding.etNoteSubTitle.setText("")
                 binding.etNoteDesc.setText("")
+                binding.imgNote.visibility = View.GONE
+                requireActivity().supportFragmentManager.popBackStack()
             }
         }
     }
