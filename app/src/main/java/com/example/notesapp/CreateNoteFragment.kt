@@ -205,6 +205,10 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
                     readStorageTask()
                 }
 
+                "WebUrl" -> {
+
+                }
+
                 else -> {
                     selectedColor = intent.getStringExtra("selectedColor")!!
                     binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
