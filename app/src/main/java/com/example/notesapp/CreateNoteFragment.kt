@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.PatternMatcher
 import android.provider.MediaStore
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -145,6 +147,15 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
         }
     }
 
+    private fun checkWebUrl() {
+        if(Patterns.WEB_URL.matcher(binding.etWebLink.text.toString()).matches()){
+            binding.btnOk.visibility = View.GONE
+            binding.btnCancel.visibility = View.GONE
+            binding.etWebLink.isEnabled = false
+        } else {
+            Toast.makeText(requireContext(), "Url is not valid", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private val BroadCastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
