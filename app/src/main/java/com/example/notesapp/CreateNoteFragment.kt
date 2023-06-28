@@ -145,14 +145,6 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
         }
     }
 
-    fun replaceFragment(fragment: Fragment, istransition: Boolean) {
-        val fragmentTransition = requireActivity().supportFragmentManager.beginTransaction()
-
-        if(istransition) {
-            fragmentTransition.setCustomAnimations(android.R.anim.slide_out_right, android.R.anim.slide_in_left)
-        }
-        fragmentTransition.replace(R.id.frame_layout, fragment).addToBackStack(fragment.javaClass.simpleName).commit()
-    }
 
     private val BroadCastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -203,13 +195,16 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
 
                 "Image" -> {
                     readStorageTask()
+                    binding.layoutWebUrl.visibility = View.GONE
                 }
 
                 "WebUrl" -> {
-
+                    binding.layoutWebUrl.visibility = View.VISIBLE
                 }
 
                 else -> {
+                    binding.imgNote.visibility = View.GONE
+                    binding.layoutWebUrl.visibility = View.GONE
                     selectedColor = intent.getStringExtra("selectedColor")!!
                     binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
 
