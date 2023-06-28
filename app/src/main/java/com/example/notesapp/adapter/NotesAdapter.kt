@@ -42,6 +42,13 @@ class NotesAdapter(val arrList : List<Notes>) : RecyclerView.Adapter<NotesAdapte
             holder.itemView.findViewById<ImageView>(R.id.imgNote).visibility = View.GONE
         }
 
+        if(arrList[position].webLink != null) {
+            holder.itemView.findViewById<TextView>(R.id.c_tvWebLink).text = arrList[position].webLink
+            holder.itemView.findViewById<TextView>(R.id.c_tvWebLink).visibility = View.VISIBLE
+        }else {
+            holder.itemView.findViewById<TextView>(R.id.c_tvWebLink).visibility = View.GONE
+        }
+
     }
 
     class NotesViewHolder(view:View) : RecyclerView.ViewHolder(view) {
