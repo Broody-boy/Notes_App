@@ -58,6 +58,7 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
     private var READ_STORAGE_PERM = 123
     private var REQUEST_CODE_IMAGE = 456
     private var selectedImagePath = ""
+    private var webLink = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +124,11 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
         binding.btnCancel.setOnClickListener {
             binding.layoutWebUrl.visibility = View.GONE
         }
+
+        binding.tvWebLink.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse(binding.etWebLink.text.toString()))
+            startActivity(intent)
+        }
     }
 
     private fun saveNote() {
@@ -131,39 +137,45 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
             Toast.makeText(context, "Note Title is Required", Toast.LENGTH_SHORT).show()
         }
 
-        if(binding.etNoteSubTitle.text.isNullOrEmpty()){
+        else if(binding.etNoteSubTitle.text.isNullOrEmpty()){
             Toast.makeText(context, "Note Sub Title is Required", Toast.LENGTH_SHORT).show()
         }
 
-        if(binding.etNoteDesc.text.isNullOrEmpty()){
+        else if(binding.etNoteDesc.text.isNullOrEmpty()){
             Toast.makeText(context, "Note Description is Required", Toast.LENGTH_SHORT).show()
         }
 
-        launch {
-            var notes = Notes()
-            notes.title = binding.etNoteTitle.text.toString()
-            notes.subTitle = binding.etNoteSubTitle.text.toString()
-            notes.noteText = binding.etNoteDesc.text.toString()
-            notes.dateTime = currentDate
-            notes.color = selectedColor
-            notes.imgPath = selectedImagePath
+        else {
+            launch {
+                var notes = Notes()
+                notes.title = binding.etNoteTitle.text.toString()
+                notes.subTitle = binding.etNoteSubTitle.text.toString()
+                notes.noteText = binding.etNoteDesc.text.toString()
+                notes.dateTime = currentDate
+                notes.color = selectedColor
+                notes.imgPath = selectedImagePath
+                notes.webLink = webLink
 
-            context?.let {
-                NotesDatabase.getDatabase(it).noteDao().insertNotes(notes)
-                binding.etNoteTitle.setText("")
-                binding.etNoteSubTitle.setText("")
-                binding.etNoteDesc.setText("")
-                binding.imgNote.visibility = View.GONE
-                requireActivity().supportFragmentManager.popBackStack()
+                context?.let {
+                    NotesDatabase.getDatabase(it).noteDao().insertNotes(notes)
+                    binding.etNoteTitle.setText("")
+                    binding.etNoteSubTitle.setText("")
+                    binding.etNoteDesc.setText("")
+                    binding.imgNote.visibility = View.GONE
+                    binding.tvWebLink.visibility = View.GONE
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
             }
         }
     }
 
     private fun checkWebUrl() {
         if(Patterns.WEB_URL.matcher(binding.etWebLink.text.toString()).matches()){
-            binding.btnOk.visibility = View.GONE
-            binding.btnCancel.visibility = View.GONE
+            binding.layoutWebUrl.visibility = View.GONE
             binding.etWebLink.isEnabled = false
+            webLink = binding.etWebLink.text.toString()
+            binding.tvWebLink.visibility = View.VISIBLE
+            binding.tvWebLink.text = binding.etWebLink.text.toString()
         } else {
             Toast.makeText(requireContext(), "Url is not valid", Toast.LENGTH_SHORT).show()
         }
