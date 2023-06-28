@@ -111,6 +111,18 @@ class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks, 
             var noteBottomSheetFragment = NoteBottomSheetFragment.newInstance()
             noteBottomSheetFragment.show(requireActivity().supportFragmentManager, "Note Bottom Sheet Fragment")
         }
+
+        binding.btnOk.setOnClickListener {
+            if(binding.etWebLink.text.toString().trim().isNotEmpty()) {
+                checkWebUrl()
+            }else {
+                Toast.makeText(requireContext(), "Url is Required", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.btnCancel.setOnClickListener {
+            binding.layoutWebUrl.visibility = View.GONE
+        }
     }
 
     private fun saveNote() {
